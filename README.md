@@ -1,4 +1,4 @@
-# SCRIPTS REPOSITORY of Koray OKSAY
+# SCRIPTS REPOSITORY
 
 This repository is for the scripts that I wrote while working. Here is the list:
 
