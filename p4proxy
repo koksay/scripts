@@ -1,0 +1,76 @@
+#!/bin/bash
+#
+# P4P (Perforce PROXY) start/stop script
+#
+# chkconfig: 345 20 80
+# description: Perforce Proxy (p4p) start/stop script
+#
+# Koray Oksay - 20140203
+
+# Source function library.
+. /etc/init.d/functions
+
+# Set parameters
+P4P_PORT="proxyhost:1999"
+P4P_REMOTE="remotehost:1666"
+P4P_CACHEDIR="/perforce/cache"
+P4P_BIN="/perforce/bin/p4p"
+P4P_LOG="/perforce/log/p4p.log"
+P4P_USER="perforce"
+P4P_NAME="p4p"
+
+start() {
+  echo -n "Starting $P4P_NAME: "
+  echo -n `date '+%Y%m%d-%H:%M:%S  '` "  " >> $P4P_LOG
+  su - $P4P_USER -c "$P4P_BIN -d -p $P4P_PORT -t $P4P_REMOTE -r $P4P_CACHEDIR" >> $P4P_LOG 2>> $P4P_LOG
+
+  RETVAL=$?
+  if [ $RETVAL -eq 0 ]; then
+    success
+    echo
+    return 0
+  else
+    failure
+    echo
+    return 1
+  fi
+}
+
+stop() {
+  echo -n $"Stopping $P4P_NAME: "
+  echo -n `date '+%Y%m%d-%H:%M:%S  '` "  " >> $P4P_LOG
+  pidlist=`pidof $P4P_NAME`
+  kill $pidlist >/dev/null 2>&1
+
+  RETVAL=$?
+  if [ $RETVAL -eq 0 ]; then
+    success
+    echo
+  else
+    failure
+    echo
+    echo "Perforce Proxy failed to stop...">> $P4P_LOG
+  fi
+
+}
+
+# main
+case "$1" in
+  start)
+      start
+      ;;
+  stop)
+      stop
+      ;;
+  status)
+      status $P4P_NAME
+      ;;
+  restart)
+      $0 stop
+      $0 start
+      ;;
+  *)
+      echo "Usage: $0 {start|stop|restart|status}"
+      exit 1
+      ;;
+esac
