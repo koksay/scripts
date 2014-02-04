@@ -1,0 +1,48 @@
+# User Management on BerkeleyDB for Virtual Vsftpd Users
+
+You setup a vsftpd server with virtual users using Berkeley DB and PAM. Now, you are wondering how to add/remove users to the database. 
+
+This simple python script manages that:
+
+## Getting started
+
+You already need to install bdb packages. For example, on RHEL:
+
+```
+yum install db4-utils db4
+```
+
+### Adding or updating a user:
+```
+./virtual_ftp_user.py -a <username> -p <password>
+```
+
+### Removing a user:
+```
+./virtual_ftp_user.py -d <username>
+```
+
+### Displaying all account information (usernames and their passwords):
+```
+./virtual_ftp_user.py -s
+```
+
+### You can also display help with -h or --help :
+```
+./virtual_ftp_user.py -h
+Usage: virtual_ftp_user.py (-a <USERNAME> -p <PASSWORD> || -d <USERNAME> || -s (True|False) ) -f <VIRTUALDB_FILE>
+
+Options:
+  --version             show program's version number and exit
+  -h, --help            show this help message and exit
+  -a USERNAME, --add=USERNAME
+                        Username to add
+  -d DEL_USER, --delete=DEL_USER
+                        Username to delete
+  -p PASSWORD, --password=PASSWORD
+                        User Password
+  -s SHOWDB, --showdb=SHOWDB
+                        Show Virtual User Database Content
+  -f BSDDB_FILE, --file=BSDDB_FILE
+                        Virtual User Database. Default is /etc/vsftpd/vsftpd-virtual-user.db
+```
