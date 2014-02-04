@@ -1,32 +1,78 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 """
-Virtual FTP User adding/deleting script for BerkeleyDB and vsftpd
-KOksay <koray.oksay@gmail.com>
+Virtual FTP User adding/deleting script
+KOksay <koray@crytek.com>
 
 HISTORY
 -------
   Version 0.1: Initial Release, 20140203
+  Version 0.2: Creating/Deleting home directories, 20140204
 """
 
 
 import bsddb
 import optparse
 import sys
+import os
+import shutil
 
 
 def parse_args():
     """ Parses config parameters """
     parser = optparse.OptionParser(usage='%prog (-a <USERNAME> -p <PASSWORD> || -d <USERNAME> || -s (True|False) ) -f <VIRTUALDB_FILE>', 
-                                   version='%prog version 0.1\nKoray Oksay 20140203')
+                                   version='%prog version 0.2\nKoray Oksay 20140204')
     parser.add_option("-a", "--add",  dest="username", default=None, help="Username to add")
     parser.add_option("-d", "--delete",  dest="del_user", default=None, help="Username to delete")
+    parser.add_option("-r", "--remove_dir", dest="rem_dir", default=False, help="Should we remove the home directory of the deleted user?")
     parser.add_option("-p", "--password", dest="password", default=None, help="User Password")
     parser.add_option("-s", "--showdb", dest="showdb", default=False, help="Show Virtual User Database Content")
     parser.add_option("-f", "--file",  dest="bsddb_file", default="/etc/vsftpd/vsftpd-virtual-user.db", 
-                      help="Virtual User Database. Default is /etc/vsftpd/vsftpd-virtual-user.db")
+                      help="Virtual User Database. Default it /etc/vsftpd/vsftpd-virtual-user.db")
     (options, args) = parser.parse_args(sys.argv)
     return options
+
+
+def get_homedir():
+    """ Get user home directory from vsftpd.conf file, local_root parameter """
+    config_file = "/etc/vsftpd/vsftpd.conf"
+    f = open(config_file, 'r')
+    for line in f:
+        if line[0:10] == "local_root":
+            # local_root=/home/vftp/$USER
+            home_dir = line.split("=")[1].split("$")[0]
+            break
+    f.close()
+
+    return home_dir
+
+
+def create_directory(username):
+    """ Creates home directory for given username """
+    home_dir = get_homedir()
+    if home_dir:
+        try:
+            home_dir += username
+            os.mkdir(home_dir, 0600)
+            print home_dir + " is created..."
+        except:
+            print home_dir + " was not created..."
+    else:
+        print "You must define local_root in the vsftpd.conf file..."
+
+
+def remove_directory(username):
+    """ Removes home directory for given username """
+    home_dir = get_homedir()
+    if home_dir:
+        try:
+            home_dir += username
+            shutil.rmtree(home_dir)
+            print home_dir + " was removed..."
+        except:
+            print home_dir + " was NOT removed..."
+    else:
+        print "You must define local_root in the vsftpd.conf file..."
 
 
 def add_user(username, password, filename):
@@ -42,8 +88,11 @@ def add_user(username, password, filename):
     except: 
         print "Cannot add or update database... " 
 
+    if action == "added":
+        create_directory(username)
 
-def delete_user(username, filename):
+
+def delete_user(username, filename, rem_dir):
     """Delete existing user"""
     try:
         db = bsddb.hashopen(filename, 'c')
@@ -55,6 +104,11 @@ def delete_user(username, filename):
             print "No such user " + username
     except:
         print "Cannot delete from database..."
+
+    if rem_dir:
+        remove_directory(username)
+    else:
+        print "Not removing " + home_dir + " since -r was not provided..."
 
 
 def show_database(filename):
@@ -77,6 +131,7 @@ def main():
     del_user = options.del_user
     password = options.password
     showdb = options.showdb
+    rem_dir = options.rem_dir
 
     if username and del_user:
         print "You cannot add and delete user at the same time!..."
@@ -88,11 +143,10 @@ def main():
     if username:
         add_user(username, password, filename)
     elif del_user:
-        delete_user(del_user, filename)
+        delete_user(del_user, filename, rem_dir)
     elif showdb:
         show_database(filename)
 
 
 if __name__ == '__main__':
     main()
-

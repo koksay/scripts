@@ -17,9 +17,10 @@ yum install db4-utils db4
 ./virtual_ftp_user.py -a <username> -p <password>
 ```
 
-### Removing a user:
+### Removing a user: 
+if -r is provided, removes the home directory
 ```
-./virtual_ftp_user.py -d <username>
+./virtual_ftp_user.py -d <username> -r True
 ```
 
 ### Displaying all account information (usernames and their passwords):
@@ -36,7 +37,7 @@ You can specify the file name of the database in all of the above switches with 
 You can also display help with -h or --help :
 ```
 ./virtual_ftp_user.py -h
-Usage: virtual_ftp_user.py (-a <USERNAME> -p <PASSWORD> || -d <USERNAME> || -s (True|False) ) -f <VIRTUALDB_FILE>
+Usage: virtual_ftp_user.py (-a <USERNAME> -p <PASSWORD> || -d <USERNAME> -r True || -s (True|False) ) -f <VIRTUALDB_FILE>
 
 Options:
   --version             show program's version number and exit
