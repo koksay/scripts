@@ -24,10 +24,16 @@ yum install db4-utils db4
 
 ### Displaying all account information (usernames and their passwords):
 ```
-./virtual_ftp_user.py -s
+./virtual_ftp_user.py -s True
 ```
 
-### You can also display help with -h or --help :
+### Which file?
+You can specify the file name of the database in all of the above switches with -f:
+```
+./virtual_ftp_user.py -a <username> -p <password> -f /etc/vsftpd/virtual-virtual-user.db
+```
+
+You can also display help with -h or --help :
 ```
 ./virtual_ftp_user.py -h
 Usage: virtual_ftp_user.py (-a <USERNAME> -p <PASSWORD> || -d <USERNAME> || -s (True|False) ) -f <VIRTUALDB_FILE>

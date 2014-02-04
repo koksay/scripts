@@ -34,7 +34,7 @@ def add_user(username, password, filename):
     action = "added"
     try:
         db = bsddb.hashopen(filename, 'c')
-        if db.has_key(username):
+        if username in db:
             action = "updated"
         db[username] = password
         db.close()
@@ -47,7 +47,7 @@ def delete_user(username, filename):
     """Delete existing user"""
     try:
         db = bsddb.hashopen(filename, 'c')
-        if db.has_key(username):
+        if username in db:
             db.pop(username)
             db.close()
             print "Username " + username + " was deleted successfully..."
