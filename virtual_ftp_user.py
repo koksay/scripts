@@ -8,6 +8,7 @@ HISTORY
 -------
   Version 0.1: Initial Release, 20140203
   Version 0.2: Creating/Deleting home directories, 20140204
+  Version 0.3: Chown home directory, 20130205
 """
 
 
@@ -16,12 +17,13 @@ import optparse
 import sys
 import os
 import shutil
+from pwd import getpwnam
 
 
 def parse_args():
     """ Parses config parameters """
     parser = optparse.OptionParser(usage='%prog (-a <USERNAME> -p <PASSWORD> || -d <USERNAME> || -s (True|False) ) -f <VIRTUALDB_FILE>', 
-                                   version='%prog version 0.2\nKoray Oksay 20140204')
+                                   version='%prog version 0.3\nKoray Oksay 20140204')
     parser.add_option("-a", "--add",  dest="username", default=None, help="Username to add")
     parser.add_option("-d", "--delete",  dest="del_user", default=None, help="Username to delete")
     parser.add_option("-r", "--remove_dir", dest="rem_dir", default=False, help="Should we remove the home directory of the deleted user?")
@@ -54,6 +56,9 @@ def create_directory(username):
         try:
             home_dir += username
             os.mkdir(home_dir, 0600)
+            uid = getpwnam('ftp').pw_uid
+            gid = getpwnam('ftp').pw_gid
+            os.chown(home_dir, uid, gid)
             print home_dir + " is created..."
         except:
             print home_dir + " was not created..."
