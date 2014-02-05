@@ -46,6 +46,8 @@ Options:
                         Username to add
   -d DEL_USER, --delete=DEL_USER
                         Username to delete
+  -r REM_DIR, --remove_dir=REM_DIR
+                        Should we remove the home directory of the deleted user?
   -p PASSWORD, --password=PASSWORD
                         User Password
   -s SHOWDB, --showdb=SHOWDB
