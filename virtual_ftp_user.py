@@ -2,7 +2,7 @@
 
 """
 Virtual FTP User adding/deleting script
-KOksay <koray@crytek.com>
+KOksay <koray.oksay@gmail.com>
 
 HISTORY
 -------
@@ -35,10 +35,10 @@ def parse_args():
 
 def get_homedir():
     """ Get user home directory from vsftpd.conf file, local_root parameter """
-    config_file = "/etc/vsftpd/vsftpd.conf"
-    f = open(config_file, 'r')
+    f = open("/etc/vsftpd/vsftpd.conf", "r")
     for line in f:
         if line[0:10] == "local_root":
+            # Example line:
             # local_root=/home/vftp/$USER
             home_dir = line.split("=")[1].split("$")[0]
             break
@@ -108,7 +108,7 @@ def delete_user(username, filename, rem_dir):
     if rem_dir:
         remove_directory(username)
     else:
-        print "Not removing " + home_dir + " since -r was not provided..."
+        print "Not removing home directory..."
 
 
 def show_database(filename):
