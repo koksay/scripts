@@ -55,7 +55,7 @@ def create_directory(username):
     if home_dir:
         try:
             home_dir += username
-            os.mkdir(home_dir, 0600)
+            os.mkdir(home_dir, 0700)
             uid = getpwnam('ftp').pw_uid
             gid = getpwnam('ftp').pw_gid
             os.chown(home_dir, uid, gid)
