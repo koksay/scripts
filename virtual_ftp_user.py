@@ -22,11 +22,11 @@ from pwd import getpwnam
 
 def parse_args():
     """ Parses config parameters """
-    parser = optparse.OptionParser(usage='%prog (-a <USERNAME> -p <PASSWORD> || -d <USERNAME> || -s (True|False) ) -f <VIRTUALDB_FILE>', 
-                                   version='%prog version 0.3\nKoray Oksay 20140204')
+    parser = optparse.OptionParser(usage='%prog (-a <USERNAME> -p <PASSWORD> || -d <USERNAME> (-r) || -s ) -f <VIRTUALDB_FILE>', 
+                                   version='%prog version 0.4\nKoray Oksay 20140522')
     parser.add_option("-a", "--add",  dest="username", default=None, help="Username to add")
     parser.add_option("-d", "--delete",  dest="del_user", default=None, help="Username to delete")
-    parser.add_option("-r", "--remove_dir", dest="rem_dir", default=False, help="Should we remove the home directory of the deleted user?")
+    parser.add_option("-r", "--remove_dir", action="store_true", dest="rem_dir", default=False, help="Should we remove the home directory of the deleted user?")
     parser.add_option("-p", "--password", dest="password", default=None, help="User Password")
     parser.add_option("-s", "--showdb", action="store_true", dest="showdb", default=False, help="Show Virtual User Database Content")
     parser.add_option("-f", "--file",  dest="bsddb_file", default="/etc/vsftpd/vsftpd-virtual-user.db", 
