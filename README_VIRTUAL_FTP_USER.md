@@ -25,7 +25,8 @@ if -r is provided, removes the home directory
 
 ### Displaying all account information (usernames and their passwords):
 ```
-./virtual_ftp_user.py -s True
+./virtual_ftp_user.py -s
+./virtual_ftp_user.py --showdb
 ```
 
 ### Which file?
