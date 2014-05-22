@@ -38,7 +38,7 @@ You can specify the file name of the database in all of the above switches with 
 You can also display help with -h or --help :
 ```
 ./virtual_ftp_user.py -h
-Usage: virtual_ftp_user.py (-a <USERNAME> -p <PASSWORD> || -d <USERNAME> -r True || -s (True|False) ) -f <VIRTUALDB_FILE>
+Usage: virtual_ftp_user.py (-a <USERNAME> -p <PASSWORD> || -d <USERNAME> (-r) || -s ) -f <VIRTUALDB_FILE>
 
 Options:
   --version             show program's version number and exit
@@ -47,12 +47,10 @@ Options:
                         Username to add
   -d DEL_USER, --delete=DEL_USER
                         Username to delete
-  -r REM_DIR, --remove_dir=REM_DIR
-                        Should we remove the home directory of the deleted user?
+  -r, --remove_dir      Should we remove the home directory of the deleted user?
   -p PASSWORD, --password=PASSWORD
                         User Password
-  -s SHOWDB, --showdb=SHOWDB
-                        Show Virtual User Database Content
+  -s, --showdb          Show Virtual User Database Content
   -f BSDDB_FILE, --file=BSDDB_FILE
                         Virtual User Database. Default is /etc/vsftpd/vsftpd-virtual-user.db
 ```
