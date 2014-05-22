@@ -28,7 +28,7 @@ def parse_args():
     parser.add_option("-d", "--delete",  dest="del_user", default=None, help="Username to delete")
     parser.add_option("-r", "--remove_dir", dest="rem_dir", default=False, help="Should we remove the home directory of the deleted user?")
     parser.add_option("-p", "--password", dest="password", default=None, help="User Password")
-    parser.add_option("-s", "--showdb", dest="showdb", default=False, help="Show Virtual User Database Content")
+    parser.add_option("-s", "--showdb", action="store_true", dest="showdb", default=False, help="Show Virtual User Database Content")
     parser.add_option("-f", "--file",  dest="bsddb_file", default="/etc/vsftpd/vsftpd-virtual-user.db", 
                       help="Virtual User Database. Default it /etc/vsftpd/vsftpd-virtual-user.db")
     (options, args) = parser.parse_args(sys.argv)
